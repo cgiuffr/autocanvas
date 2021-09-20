@@ -27,6 +27,8 @@ class CanvasManager():
                 ids = set(lines)
         for e in self.course.get_enrollments(role=role, state=state):
             user = e.user
+            if not user['sis_user_id'] or not user['sis_user_id'].isnumeric():
+                continue
             if not user_file:
                 enrollments.append(e)
                 continue
@@ -50,7 +52,6 @@ cm.connect(params.API_URL, params.API_KEY, params.course)
 enrollments = cm.get_target_enrollments(params.user_file, params.user_file_id, params.user_file_type, params.user_state, params.user_role)
 
 for e in enrollments:
-    u = e.user
     if params.action == 'dump':
         print(f'[{params.action}] {repr(e)}')
         continue
