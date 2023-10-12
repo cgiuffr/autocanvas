@@ -9,7 +9,6 @@ from canvasapi import requester
 from types import SimpleNamespace
 from datetime import datetime, timedelta
 
-
 class CanvasManager():
     canvas = None
     course = None
@@ -59,8 +58,11 @@ class CanvasManager():
 
         if type == 'new':
             for user_id in user_id_set:
-                enrollments.append(self.new_enrollment_stub(
-                    user_id, user_id_name, role[0]))
+                try:
+                    enrollments.append(self.new_enrollment_stub(
+                        user_id, user_id_name, role[0]))
+                except requester.ResourceDoesNotExist:
+                    print("WARNING: Can't find user with {}: {}".format(user_id_name, user_id))
 
         return enrollments
 
